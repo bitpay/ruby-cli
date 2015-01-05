@@ -1,3 +1,5 @@
+BITPAY_ROOT = File.expand_path("~") + "./bp/"
+## test constants
 ROOT_ADDRESS = ENV['RCROOTADDRESS']
 TEST_USER = ENV['RCTESTUSER']
 TEST_PASS = ENV['RCTESTPASSWORD']

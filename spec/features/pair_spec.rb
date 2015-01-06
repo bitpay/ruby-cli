@@ -14,17 +14,19 @@ describe "pairing a token", javascript: true, type: :feature do
     click_button("Add Token")
     find(".token-claimcode", match: :first).text
   end
-  let(:pem) { BitPay::KeyUtils.generate_pem }
-  let(:client) { BitPay::Client.new(api_uri: ROOT_ADDRESS, pem: pem, insecure: true) }
-
-  context "pairing an unpaired client" do
-    it "should have no tokens before pairing" do
-      expect(client.instance_variable_get(:@tokens)).to be_empty
+  context "when no pem file exists" do
+    before do
+      File.delete(BitPay::PRIVATE_KEY_PATH) if File.exists?(BitPay::PRIVATE_KEY_PATH)
+      File.delete(BitPay::TOKEN_FILE) if File.exists?(BitPay::TOKEN_FILE)
+      `./bin/bitpay pair #{claimCode} --insecure #{ROOT_ADDRESS}`
     end
-    it "should have a pos token after pairing" do
-      client.pair_pos_client(claimCode)  
-      expect(client.instance_variable_get(:@tokens)['pos']).not_to be_empty
+
+    it "should save a pem file when pairing" do
+      expect(File.exists?(BitPay::PRIVATE_KEY_PATH)).to eq true
+    end
+
+    it "should save a token when pairing" do
+      expect(JSON.parse(File.read(BitPay::TOKEN_FILE_PATH))["pos"]).to_not be_nil
     end
   end
-
 end

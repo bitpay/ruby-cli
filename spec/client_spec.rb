@@ -11,6 +11,7 @@ end
 
 describe BitPay::Client do
   let(:bitpay_client) { BitPay::Client.new({api_uri: BitPay::TEST_API_URI}) }
+  let(:claim_code) { "a12bc3d" }
 
   before do
       allow(BitPay::KeyUtils).to receive(:nonce).and_return('1')
@@ -50,16 +51,25 @@ describe BitPay::Client do
   end
 
   describe "#pair_pos_client" do
-    it 'throws a BitPayError with the error message if the token setting fails' do
+    before do
       stub_const('ENV', {'BITPAY_PEM' => PEM})
+    end
+
+    it 'throws a BitPayError with the error message if the token setting fails' do
       stub_request(:any, /#{BitPay::TEST_API_URI}.*/).to_return(status: 500, body: "{\n  \"error\": \"Unable to create token\"\n}")
-      expect { bitpay_client.pair_pos_client(:claim_code) }.to raise_error(BitPay::BitPayError, '500: Unable to create token')
+      expect { bitpay_client.pair_pos_client(claim_code) }.to raise_error(BitPay::BitPayError, '500: Unable to create token')
     end 
 
     it 'gracefully handles 4xx errors' do
-      stub_const('ENV', {'BITPAY_PEM' => PEM})
       stub_request(:any, /#{BitPay::TEST_API_URI}.*/).to_return(status: 403, body: "{\n  \"error\": \"this is a 403 error\"\n}")
-      expect { bitpay_client.pair_pos_client(:claim_code) }.to raise_error(BitPay::BitPayError, '403: this is a 403 error')
+      expect { bitpay_client.pair_pos_client(claim_code) }.to raise_error(BitPay::BitPayError, '403: this is a 403 error')
+    end
+
+    it 'short circuits on invalid pairing codes' do
+      100.times do
+        claim_code = an_illegal_claim_code
+        expect{bitpay_client.pair_pos_client(claim_code)}.to raise_error BitPay::ArgumentError, "pairing code is not legal"
+      end
     end
   end
 
@@ -68,16 +78,46 @@ describe BitPay::Client do
     before {stub_const('ENV', {'BITPAY_PEM' => PEM})}
     it { is_expected.to respond_to(:create_invoice) }
 
-    it 'should make call to the server to create an invoice' do
-      stub_request(:post, /#{BitPay::TEST_API_URI}\/invoices.*/).to_return(:body => '{"data": "awesome"}')
-      bitpay_client.create_invoice(id: "addd", price: 20, currency: "USD")
-      assert_requested :post, "#{BitPay::TEST_API_URI}/invoices"
+    describe "should make the call to the server to create an invoice" do
+      it 'allows numeric input for the price' do
+        stub_request(:post, /#{BitPay::TEST_API_URI}\/invoices.*/).to_return(:body => '{"data": "awesome"}')
+        bitpay_client.create_invoice(price: 20.00, currency: "USD")
+        assert_requested :post, "#{BitPay::TEST_API_URI}/invoices"
+      end
+
+      it 'allows string input for the price' do
+        stub_request(:post, /#{BitPay::TEST_API_URI}\/invoices.*/).to_return(:body => '{"data": "awesome"}')
+        bitpay_client.create_invoice(price: "20.00", currency: "USD")
+        assert_requested :post, "#{BitPay::TEST_API_URI}/invoices"
+      end
     end
 
     it 'should pass through the API error message from load_tokens' do
       stub_request(:get, /#{BitPay::TEST_API_URI}\/tokens.*/).to_return(status: 500, body: '{"error": "load_tokens_error"}')
-      expect { bitpay_client.create_invoice(id: "addd", price: 20, currency: "USD") }.to raise_error(BitPay::BitPayError, '500: load_tokens_error')         
+      expect { bitpay_client.create_invoice(price: 20, currency: "USD") }.to raise_error(BitPay::BitPayError, '500: load_tokens_error')         
+    end
+
+    it 'verifies the validity of the price argument' do
+      expect { bitpay_client.create_invoice(price: "3,999", currency: "USD") }.to raise_error(BitPay::ArgumentError, 'Illegal Argument: Price must be formatted as a float')
+    end
+    
+    it 'verifies the validity of the currency argument' do
+      expect { bitpay_client.create_invoice(price: "3999", currency: "UASD") }.to raise_error(BitPay::ArgumentError, 'Illegal Argument: Currency is invalid.')
     end
   end
-end
 
+  describe '#set_token' do
+    subject { bitpay_client }
+    before {stub_const('ENV', {'BITPAY_PEM' => PEM})}
+    it { is_expected.to respond_to(:set_token) }
+    it 'sets a token in the client' do
+
+    end
+  end
+
+  describe "#verify_token" do
+    subject { bitpay_client }
+    before {stub_const('ENV', {'BITPAY_PEM' => PEM})}
+    it { is_expected.to respond_to(:verify_token) }
+  end
+end

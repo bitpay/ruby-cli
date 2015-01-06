@@ -24,7 +24,7 @@ describe "create an invoice", javascript: true, type: :feature do
     @client ||= set_client.call
     @invoice_id ||= SecureRandom.uuid
     @price ||= (100..150).to_a.sample
-    @invoice = @client.create_invoice(id: @invoice_id, currency: "USD", price: @price)
+    @invoice = @client.create_invoice(currency: "USD", price: @price)
   end
 
   it "should create an invoice" do

@@ -18,19 +18,8 @@ describe BitPay::Client do
       stub_request(:get, /#{BitPay::TEST_API_URI}\/tokens.*/).to_return(:status => 200, :body => tokens.to_json, :headers => {})
   end
 
-  describe "#initialize" do
-
-    it 'should be able to get pem file from the env' do
-      stub_const('ENV', {'BITPAY_PEM' => PEM})
-      expect {bitpay_client}.to_not raise_error
-    end
-    
-  end
 
   describe "#send_request" do
-    before do
-      stub_const('ENV', {'BITPAY_PEM' => PEM})
-    end
 
     context "GET" do    
       it 'should generate a get request' do
@@ -75,7 +64,6 @@ describe BitPay::Client do
 
   describe "#create_invoice" do
     subject { bitpay_client }
-    before {stub_const('ENV', {'BITPAY_PEM' => PEM})}
     it { is_expected.to respond_to(:create_invoice) }
 
     describe "should make the call to the server to create an invoice" do
@@ -108,7 +96,6 @@ describe BitPay::Client do
 
   describe '#set_token' do
     subject { bitpay_client }
-    before {stub_const('ENV', {'BITPAY_PEM' => PEM})}
     it { is_expected.to respond_to(:set_token) }
     it 'sets a token in the client' do
 
@@ -117,7 +104,6 @@ describe BitPay::Client do
 
   describe "#verify_token" do
     subject { bitpay_client }
-    before {stub_const('ENV', {'BITPAY_PEM' => PEM})}
     it { is_expected.to respond_to(:verify_token) }
   end
 end

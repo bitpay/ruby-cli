@@ -11,7 +11,7 @@ require 'bitpay/version'
 
 module BitPay
 
-  BITPAY_CREDENTIALS_DIR = File.join(Dir.home, ".bitpay")
+  BITPAY_CREDENTIALS_DIR = ENV['RCBITPAYROOT'] || File.expand_path("~") + "/.bitpay/"
   PRIVATE_KEY_FILE = 'bitpay.pem'
   PRIVATE_KEY_PATH = File.join(BITPAY_CREDENTIALS_DIR, PRIVATE_KEY_FILE)
   TOKEN_FILE = 'tokens.json'

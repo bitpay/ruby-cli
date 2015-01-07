@@ -1,4 +1,4 @@
-# BitPay Library for Ruby [![](https://travis-ci.org/bitpay/ruby-cli.svg)](http://travis-ci.org/bitpay/ruby-cli)
+# BitPay Library for Ruby [![](https://travis-ci.org/bitpay/ruby-cli.svg)](http://travis-ci.org/bitpay/ruby-cli) [![Gem Version](https://badge.fury.io/rb/bitpay-client.svg)](http://badge.fury.io/rb/bitpay-client)
 Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API.
 
 ## Installation

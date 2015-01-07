@@ -6,7 +6,6 @@ require 'capybara/poltergeist'
 require File.join File.dirname(__FILE__), '..', 'lib', 'bitpay.rb'
 
 require_relative '../config/constants.rb'
-
 require_relative '../config/capybara.rb'
 #
 ## Test Variables
@@ -20,6 +19,10 @@ CLIENT_ID = "TeyN4LPrXiG5t2yuSamKqP3ynVk3F52iHrX"
 RSpec.configure do |config|
   config.before :each do |example|
     WebMock.allow_net_connect! if example.metadata[:type] == :feature 
+  end
+
+  config.before :all do |example|
+    FileUtils.mkdir_p(BitPay::BITPAY_CREDENTIALS_DIR)
   end
 end
 

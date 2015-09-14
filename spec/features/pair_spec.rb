@@ -2,22 +2,15 @@ require_relative '../spec_helper.rb'
 
 describe "pairing a token", javascript: true, type: :feature do
   let(:claimCode) do 
-    visit ROOT_ADDRESS
-    click_link('Login')
-    fill_in 'email', :with => TEST_USER
-    fill_in 'password', :with => TEST_PASS
-    click_button('loginButton')
-    click_link "My Account"
-    click_link "API Tokens", match: :first
-    find(".token-access-new-button").find(".btn").find(".icon-plus").click
-    sleep 0.25
-    click_button("Add Token")
-    find(".token-claimcode", match: :first).text
+    File.delete(BitPay::TOKEN_FILE_PATH) if File.exists?(BitPay::TOKEN_FILE_PATH)
+    client = BitPay::Client.new(api_uri: ROOT_ADDRESS, insecure: true)
+    token = client.get(path: "tokens")["data"].select{|tuple| tuple["merchant"]}.first.values.first
+    client.post(path: "tokens", token: token, params: {facade: "pos"})["data"][0]["pairingCode"]
   end
-  context "when no pem file exists" do
+
+  context "when a pem file exists" do
     before do
-      File.delete(BitPay::PRIVATE_KEY_PATH) if File.exists?(BitPay::PRIVATE_KEY_PATH)
-      File.delete(BitPay::TOKEN_FILE) if File.exists?(BitPay::TOKEN_FILE)
+      sleep(5)
       `./bin/bitpay pair #{claimCode} --insecure #{ROOT_ADDRESS}`
     end
 

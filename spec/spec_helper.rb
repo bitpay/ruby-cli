@@ -1,12 +1,9 @@
 require 'webmock/rspec'
 require 'pry'
-require 'capybara/rspec'
-require 'capybara/poltergeist'
 
 require File.join File.dirname(__FILE__), '..', 'lib', 'bitpay.rb'
 
 require_relative '../config/constants.rb'
-require_relative '../config/capybara.rb'
 #
 ## Test Variables
 #

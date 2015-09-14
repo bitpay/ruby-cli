@@ -18,7 +18,7 @@ module BitPay
 
     private
     def get_token_from_response response
-      ({response["data"][0]["facade"] => response["data"][0]["token"]}).to_json
+      ({response[0]["facade"] => response[0]["token"]}).to_json
     end
   end
 end

@@ -6,3 +6,4 @@ pkg
 .ruby-version
 .ruby-gemset
 .pem.data
+coverage/

@@ -1,4 +1,11 @@
-# BitPay Library for Ruby [![](https://travis-ci.org/bitpay/ruby-cli.svg)](http://travis-ci.org/bitpay/ruby-cli) [![Gem Version](https://badge.fury.io/rb/bitpay-client.svg)](http://badge.fury.io/rb/bitpay-client)
+# BitPay Library for Ruby
+
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/bitpay/ruby-cli/master/LICENSE.md)
+[![Travis](https://img.shields.io/travis/bitpay/ruby-cli.svg?style=flat-square)](https://travis-ci.org/bitpay/ruby-cli)
+[![Gem](https://img.shields.io/gem/v/bitpay-client.svg?style=flat-square)](https://rubygems.org/gems/bitpay-client)
+[![Coveralls](https://img.shields.io/coveralls/bitpay/ruby-cli.svg?style=flat-square)](https://coveralls.io/github/bitpay/ruby-cli)
+[![Code Climate](https://img.shields.io/codeclimate/github/bitpay/ruby-cli.svg?style=flat-square)](https://codeclimate.com/github/bitpay/ruby-cli)
+
 Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API.
 
 ## Installation
@@ -75,7 +82,7 @@ The code has been fully code documented, and the latest version is always availa
 
     $ bundle install
     $ bundle exec rake
-
+jj
 ## Found a bug?
 Let us know! Send a pull request or a patch. Questions? Ask! We're here to help. We will respond to all filed issues.
 

@@ -1,5 +1,6 @@
 require 'webmock/rspec'
-require 'pry'
+require 'coveralls'
+Coveralls.wear!
 
 require File.join File.dirname(__FILE__), '..', 'lib', 'bitpay.rb'
 

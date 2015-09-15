@@ -75,9 +75,6 @@ In order to pair with testnet, you will need a pairing code from test.bitpay.com
 
 API Documentation is available on the [BitPay site](https://bitpay.com/api).
 
-## RDoc/YARD Documentation
-The code has been fully code documented, and the latest version is always available at the [Rubydoc Site](http://rubydoc.info/gems/bitpay-client).
-
 ## Running the Tests
 
     $ bundle install

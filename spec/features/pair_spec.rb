@@ -10,16 +10,15 @@ describe "pairing a token", javascript: true, type: :feature do
 
   context "when a pem file exists" do
     before do
+      sleep(5)
       `./bin/bitpay pair #{claimCode} --insecure #{ROOT_ADDRESS}`
     end
 
     it "should save a pem file when pairing" do
-      sleep(5)
       expect(File.exists?(BitPay::PRIVATE_KEY_PATH)).to eq true
     end
 
     it "should save a token when pairing" do
-      sleep(5)
       expect(JSON.parse(File.read(BitPay::TOKEN_FILE_PATH))["pos"]).to_not be_nil
     end
   end

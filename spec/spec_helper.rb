@@ -12,7 +12,6 @@ PEM = "-----BEGIN EC PRIVATE KEY-----\nMHQCAQEEICg7E4NN53YkaWuAwpoqjfAofjzKI7Jq1
 PUB_KEY = '038d970d6ba29dcfa190c177140fd889fadd6d2590b1ee1a6a06e255dbf22b4017'
 CLIENT_ID = "TeyN4LPrXiG5t2yuSamKqP3ynVk3F52iHrX"
 
-
 RSpec.configure do |config|
   config.before :each do |example|
     WebMock.allow_net_connect! if example.metadata[:type] == :feature 
@@ -20,6 +19,9 @@ RSpec.configure do |config|
 
   config.before :all do |example|
     FileUtils.mkdir_p(BitPay::BITPAY_CREDENTIALS_DIR)
+    unless File.exists?(BitPay::PRIVATE_KEY_PATH)
+      File.write(BitPay::PRIVATE_KEY_PATH, ENV['BITPAYPEM'].gsub("\\n", "\n"))
+    end
   end
 end
 

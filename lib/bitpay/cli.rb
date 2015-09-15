@@ -5,7 +5,6 @@
 require 'rubygems'
 require 'commander/import'
 require_relative '../bitpay'
-require 'pry'
 
 program :name, 'BitPay Ruby Library CLI'
 program :version, BitPay::VERSION
